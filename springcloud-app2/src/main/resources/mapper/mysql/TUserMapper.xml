@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.auth.dao.ITUserDao">
+<!-- 
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" readOnly="true"/>
+ -->
+	<resultMap id="BaseResultMap" type="com.test.auth.domain.TUser" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+	    <result column="ID" property="id" jdbcType="INTEGER" />
+	    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+	    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+	    <result column="FULLNAME" property="fullname" jdbcType="VARCHAR" />
+	    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+	    <result column="ID" property="id" jdbcType="INTEGER" />
+	    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+	    <result column="ZHUANYE" property="zhuanye" jdbcType="VARCHAR" />
+	    <result column="CREATETIME" property="createtime" jdbcType="DATE" />
+	    <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
+	    <result column="ID" property="id" jdbcType="INTEGER" />
+	    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+	    <result column="ZHUANYE" property="zhuanye" jdbcType="VARCHAR" />
+	    <result column="CREATETIME" property="createtime" jdbcType="DATE" />
+	    <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
+
+    </resultMap>
+	
+	<sql id="Base_Column_List">
+    		ID as ID,
+    		USERNAME as USERNAME,
+    		PASSWORD as PASSWORD,
+    		FULLNAME as FULLNAME,
+    		MOBILE as MOBILE,
+    		ID as ID,
+    		USERNAME as USERNAME,
+    		ZHUANYE as ZHUANYE,
+    		CREATETIME as CREATETIME,
+    		UPDATETIME as UPDATETIME,
+    		ID as ID,
+    		USERNAME as USERNAME,
+    		ZHUANYE as ZHUANYE,
+    		CREATETIME as CREATETIME,
+    		UPDATETIME as UPDATETIME
+	</sql>
+	
+	
+	<sql id="Base_Where_Clause">
+		<trim prefix="where" prefixOverrides="AND ">
+	    		<if test="id != null and id !='' "> and ID = #{id}</if>
+	    		<if test="username != null and username !='' "> and USERNAME = #{username}</if>
+	    		<if test="password != null and password !='' "> and PASSWORD = #{password}</if>
+	    		<if test="fullname != null and fullname !='' "> and FULLNAME = #{fullname}</if>
+	    		<if test="mobile != null and mobile !='' "> and MOBILE = #{mobile}</if>
+	    		<if test="id != null and id !='' "> and ID = #{id}</if>
+	    		<if test="username != null and username !='' "> and USERNAME = #{username}</if>
+	    		<if test="zhuanye != null and zhuanye !='' "> and ZHUANYE = #{zhuanye}</if>
+	    		<if test="createtime != null and createtime !='' "> and CREATETIME = #{createtime}</if>
+	    		<if test="updatetime != null and updatetime !='' "> and UPDATETIME = #{updatetime}</if>
+	    		<if test="id != null and id !='' "> and ID = #{id}</if>
+	    		<if test="username != null and username !='' "> and USERNAME = #{username}</if>
+	    		<if test="zhuanye != null and zhuanye !='' "> and ZHUANYE = #{zhuanye}</if>
+	    		<if test="createtime != null and createtime !='' "> and CREATETIME = #{createtime}</if>
+	    		<if test="updatetime != null and updatetime !='' "> and UPDATETIME = #{updatetime}</if>
+		</trim>
+		<if test="sorting != null">order by  ${sorting}</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</sql>
+	
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		<!-- select count(id)-->
+		select count(1)
+		from t_user
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="select" resultMap="BaseResultMap" parameterType="com.test.auth.domain.TUser">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="loadUserByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user where username = #{_parameter}
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where id = #{_parameter}
+	</select>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from t_user
+		where id = #{_parameter}
+	</delete>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="com.test.auth.domain.TUser">
+		delete from t_user
+		<include refid="Base_Where_Clause" />
+	</delete>
+
+	<!-- 添加 -->	
+	<insert id="insert" parameterType="com.test.auth.domain.TUser">
+		insert into t_user(
+    		ID,
+    		USERNAME,
+    		PASSWORD,
+    		FULLNAME,
+    		MOBILE,
+    		ID,
+    		USERNAME,
+    		ZHUANYE,
+    		CREATETIME,
+    		UPDATETIME,
+    		ID,
+    		USERNAME,
+    		ZHUANYE,
+    		CREATETIME,
+    		UPDATETIME
+		)
+		values (
+    		#{id},
+    		#{username},
+    		#{password},
+    		#{fullname},
+    		#{mobile},
+    		#{id},
+    		#{username},
+    		#{zhuanye},
+    		#{createtime},
+    		#{updatetime},
+    		#{id},
+    		#{username},
+    		#{zhuanye},
+    		#{createtime},
+    		#{updatetime}
+		)
+	</insert>
+		
+	
+	<!-- 通过ID更新 -->
+	<update id="updateByIdSelective" parameterType="com.test.auth.domain.TUser">
+		update t_user
+		<trim prefix="SET" prefixOverrides=", ">
+	    	<if test="id != null"> , ID = #{id}</if>
+	    	<if test="username != null"> , USERNAME = #{username}</if>
+	    	<if test="password != null"> , PASSWORD = #{password}</if>
+	    	<if test="fullname != null"> , FULLNAME = #{fullname}</if>
+	    	<if test="mobile != null"> , MOBILE = #{mobile}</if>
+	    	<if test="id != null"> , ID = #{id}</if>
+	    	<if test="username != null"> , USERNAME = #{username}</if>
+	    	<if test="zhuanye != null"> , ZHUANYE = #{zhuanye}</if>
+	    	<if test="createtime != null"> , CREATETIME = #{createtime}</if>
+	    	<if test="updatetime != null"> , UPDATETIME = #{updatetime}</if>
+	    	<if test="id != null"> , ID = #{id}</if>
+	    	<if test="username != null"> , USERNAME = #{username}</if>
+	    	<if test="zhuanye != null"> , ZHUANYE = #{zhuanye}</if>
+	    	<if test="createtime != null"> , CREATETIME = #{createtime}</if>
+	    	<if test="updatetime != null"> , UPDATETIME = #{updatetime}</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<update id="updateById" parameterType="com.test.auth.domain.TUser">
+		update t_user
+		<trim prefix="SET" prefixOverrides=", "> 
+    		ID = #{id},
+    		USERNAME = #{username},
+    		PASSWORD = #{password},
+    		FULLNAME = #{fullname},
+    		MOBILE = #{mobile},
+    		ID = #{id},
+    		USERNAME = #{username},
+    		ZHUANYE = #{zhuanye},
+    		CREATETIME = #{createtime},
+    		UPDATETIME = #{updatetime},
+    		ID = #{id},
+    		USERNAME = #{username},
+    		ZHUANYE = #{zhuanye},
+    		CREATETIME = #{createtime},
+    		UPDATETIME = #{updatetime}
+    	</trim>
+		where id = #{id}
+	</update>
+</mapper>

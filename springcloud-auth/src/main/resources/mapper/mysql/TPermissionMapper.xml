@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.auth.dao.ITPermissionDao">
+<!-- 
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" readOnly="true"/>
+ -->
+	<resultMap id="BaseResultMap" type="com.test.auth.domain.TPermission" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+	    <result column="ID" property="id" jdbcType="VARCHAR" />
+	    <result column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+	    <result column="URL" property="url" jdbcType="VARCHAR" />
+
+    </resultMap>
+	
+	<sql id="Base_Column_List">
+    		ID as ID,
+    		CODE as CODE,
+    		DESCRIPTION as DESCRIPTION,
+    		URL as URL
+	</sql>
+	
+	
+	<sql id="Base_Where_Clause">
+		<trim prefix="where" prefixOverrides="AND ">
+	    		<if test="id != null and id !='' "> and ID = #{id}</if>
+	    		<if test="code != null and code !='' "> and CODE = #{code}</if>
+	    		<if test="description != null and description !='' "> and DESCRIPTION = #{description}</if>
+	    		<if test="url != null and url !='' "> and URL = #{url}</if>
+		</trim>
+	</sql>
+	
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		<!-- select count(id)-->
+		select count(1)
+		from t_permission
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="select" resultMap="BaseResultMap" parameterType="com.test.auth.domain.TPermission">
+		select
+		<include refid="Base_Column_List" />
+		from t_permission
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="findPermissionsByUserId" resultType="java.lang.String" parameterType="java.lang.String">
+		select url from t_permission where id in(
+			select permission_id from t_role_permission where role_id in (
+				select role_id from t_user_role where user_id = #{_parameter}
+			)
+		) 
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_permission
+		where id = #{_parameter}
+	</select>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from t_permission
+		where id = #{_parameter}
+	</delete>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="com.test.auth.domain.TPermission">
+		delete from t_permission
+		<include refid="Base_Where_Clause" />
+	</delete>
+
+	<!-- 添加 -->	
+	<insert id="insert" parameterType="com.test.auth.domain.TPermission">
+		insert into t_permission(
+    		ID,
+    		CODE,
+    		DESCRIPTION,
+    		URL
+		)
+		values (
+    		#{id},
+    		#{code},
+    		#{description},
+    		#{url}
+		)
+	</insert>
+		
+	
+	<!-- 通过ID更新 -->
+	<update id="updateByIdSelective" parameterType="com.test.auth.domain.TPermission">
+		update t_permission
+		<trim prefix="SET" prefixOverrides=", ">
+	    	<if test="id != null"> , ID = #{id}</if>
+	    	<if test="code != null"> , CODE = #{code}</if>
+	    	<if test="description != null"> , DESCRIPTION = #{description}</if>
+	    	<if test="url != null"> , URL = #{url}</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<update id="updateById" parameterType="com.test.auth.domain.TPermission">
+		update t_permission
+		<trim prefix="SET" prefixOverrides=", "> 
+    		ID = #{id},
+    		CODE = #{code},
+    		DESCRIPTION = #{description},
+    		URL = #{url}
+    	</trim>
+		where id = #{id}
+	</update>
+</mapper>

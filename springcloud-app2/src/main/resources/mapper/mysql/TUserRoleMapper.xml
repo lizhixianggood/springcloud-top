@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.auth.dao.ITUserRoleDao">
+<!-- 
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" readOnly="true"/>
+ -->
+	<resultMap id="BaseResultMap" type="com.test.auth.domain.TUserRole" >
+		<id column="user_id" property="userId" jdbcType="VARCHAR" />
+	    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+	    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+	    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+	    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+
+    </resultMap>
+	
+	<sql id="Base_Column_List">
+    		USER_ID as USER_ID,
+    		ROLE_ID as ROLE_ID,
+    		CREATE_TIME as CREATE_TIME,
+    		CREATOR as CREATOR
+	</sql>
+	
+	
+	<sql id="Base_Where_Clause">
+		<trim prefix="where" prefixOverrides="AND ">
+	    		<if test="userId != null and userId !='' "> and USER_ID = #{userId}</if>
+	    		<if test="roleId != null and roleId !='' "> and ROLE_ID = #{roleId}</if>
+	    		<if test="createTime != null and createTime !='' "> and CREATE_TIME = #{createTime}</if>
+	    		<if test="creator != null and creator !='' "> and CREATOR = #{creator}</if>
+		</trim>
+		<if test="sorting != null">order by  ${sorting}</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</sql>
+	
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		<!-- select count(user_id)-->
+		select count(1)
+		from t_user_role
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="select" resultMap="BaseResultMap" parameterType="com.test.auth.domain.TUserRole">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_role
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_role
+		where user_id = #{_parameter}
+	</select>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from t_user_role
+		where user_id = #{_parameter}
+	</delete>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="com.test.auth.domain.TUserRole">
+		delete from t_user_role
+		<include refid="Base_Where_Clause" />
+	</delete>
+
+	<!-- 添加 -->	
+	<insert id="insert" parameterType="com.test.auth.domain.TUserRole">
+		insert into t_user_role(
+    		USER_ID,
+    		ROLE_ID,
+    		CREATE_TIME,
+    		CREATOR
+		)
+		values (
+    		#{userId},
+    		#{roleId},
+    		#{createTime},
+    		#{creator}
+		)
+	</insert>
+		
+	
+	<!-- 通过ID更新 -->
+	<update id="updateByIdSelective" parameterType="com.test.auth.domain.TUserRole">
+		update t_user_role
+		<trim prefix="SET" prefixOverrides=", ">
+	    	<if test="userId != null"> , USER_ID = #{userId}</if>
+	    	<if test="roleId != null"> , ROLE_ID = #{roleId}</if>
+	    	<if test="createTime != null"> , CREATE_TIME = #{createTime}</if>
+	    	<if test="creator != null"> , CREATOR = #{creator}</if>
+		</trim>
+		where user_id = #{userId}
+	</update>
+	
+	<update id="updateById" parameterType="com.test.auth.domain.TUserRole">
+		update t_user_role
+		<trim prefix="SET" prefixOverrides=", "> 
+    		USER_ID = #{userId},
+    		ROLE_ID = #{roleId},
+    		CREATE_TIME = #{createTime},
+    		CREATOR = #{creator}
+    	</trim>
+		where user_id = #{userId}
+	</update>
+</mapper>

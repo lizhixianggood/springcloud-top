@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.auth.dao.ITRoleDao">
+<!-- 
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" readOnly="true"/>
+ -->
+	<resultMap id="BaseResultMap" type="com.test.auth.domain.TRole" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+	    <result column="ID" property="id" jdbcType="VARCHAR" />
+	    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+	    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+	    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+	    <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+	    <result column="STATUS" property="status" jdbcType="CHAR" />
+
+    </resultMap>
+	
+	<sql id="Base_Column_List">
+    		ID as ID,
+    		ROLE_NAME as ROLE_NAME,
+    		DESCRIPTION as DESCRIPTION,
+    		CREATE_TIME as CREATE_TIME,
+    		UPDATE_TIME as UPDATE_TIME,
+    		STATUS as STATUS
+	</sql>
+	
+	
+	<sql id="Base_Where_Clause">
+		<trim prefix="where" prefixOverrides="AND ">
+	    		<if test="id != null and id !='' "> and ID = #{id}</if>
+	    		<if test="roleName != null and roleName !='' "> and ROLE_NAME = #{roleName}</if>
+	    		<if test="description != null and description !='' "> and DESCRIPTION = #{description}</if>
+	    		<if test="createTime != null and createTime !='' "> and CREATE_TIME = #{createTime}</if>
+	    		<if test="updateTime != null and updateTime !='' "> and UPDATE_TIME = #{updateTime}</if>
+	    		<if test="status != null and status !='' "> and STATUS = #{status}</if>
+		</trim>
+		<if test="sorting != null">order by  ${sorting}</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</sql>
+	
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		<!-- select count(id)-->
+		select count(1)
+		from t_role
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="select" resultMap="BaseResultMap" parameterType="com.test.auth.domain.TRole">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		where id = #{_parameter}
+	</select>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from t_role
+		where id = #{_parameter}
+	</delete>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="com.test.auth.domain.TRole">
+		delete from t_role
+		<include refid="Base_Where_Clause" />
+	</delete>
+
+	<!-- 添加 -->	
+	<insert id="insert" parameterType="com.test.auth.domain.TRole">
+		insert into t_role(
+    		ID,
+    		ROLE_NAME,
+    		DESCRIPTION,
+    		CREATE_TIME,
+    		UPDATE_TIME,
+    		STATUS
+		)
+		values (
+    		#{id},
+    		#{roleName},
+    		#{description},
+    		#{createTime},
+    		#{updateTime},
+    		#{status}
+		)
+	</insert>
+		
+	
+	<!-- 通过ID更新 -->
+	<update id="updateByIdSelective" parameterType="com.test.auth.domain.TRole">
+		update t_role
+		<trim prefix="SET" prefixOverrides=", ">
+	    	<if test="id != null"> , ID = #{id}</if>
+	    	<if test="roleName != null"> , ROLE_NAME = #{roleName}</if>
+	    	<if test="description != null"> , DESCRIPTION = #{description}</if>
+	    	<if test="createTime != null"> , CREATE_TIME = #{createTime}</if>
+	    	<if test="updateTime != null"> , UPDATE_TIME = #{updateTime}</if>
+	    	<if test="status != null"> , STATUS = #{status}</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<update id="updateById" parameterType="com.test.auth.domain.TRole">
+		update t_role
+		<trim prefix="SET" prefixOverrides=", "> 
+    		ID = #{id},
+    		ROLE_NAME = #{roleName},
+    		DESCRIPTION = #{description},
+    		CREATE_TIME = #{createTime},
+    		UPDATE_TIME = #{updateTime},
+    		STATUS = #{status}
+    	</trim>
+		where id = #{id}
+	</update>
+</mapper>

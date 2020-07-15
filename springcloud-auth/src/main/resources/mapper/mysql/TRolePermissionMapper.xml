@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.auth.dao.ITRolePermissionDao">
+<!-- 
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" readOnly="true"/>
+ -->
+	<resultMap id="BaseResultMap" type="com.test.auth.domain.TRolePermission" >
+		<id column="role_id" property="roleId" jdbcType="VARCHAR" />
+	    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+	    <result column="PERMISSION_ID" property="permissionId" jdbcType="VARCHAR" />
+
+    </resultMap>
+	
+	<sql id="Base_Column_List">
+    		ROLE_ID as ROLE_ID,
+    		PERMISSION_ID as PERMISSION_ID
+	</sql>
+	
+	
+	<sql id="Base_Where_Clause">
+		<trim prefix="where" prefixOverrides="AND ">
+	    		<if test="roleId != null and roleId !='' "> and ROLE_ID = #{roleId}</if>
+	    		<if test="permissionId != null and permissionId !='' "> and PERMISSION_ID = #{permissionId}</if>
+		</trim>
+	</sql>
+	
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		<!-- select count(role_id)-->
+		select count(1)
+		from t_role_permission
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="select" resultMap="BaseResultMap" parameterType="com.test.auth.domain.TRolePermission">
+		select
+		<include refid="Base_Column_List" />
+		from t_role_permission
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_role_permission
+		where role_id = #{_parameter}
+	</select>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from t_role_permission
+		where role_id = #{_parameter}
+	</delete>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="com.test.auth.domain.TRolePermission">
+		delete from t_role_permission
+		<include refid="Base_Where_Clause" />
+	</delete>
+
+	<!-- 添加 -->	
+	<insert id="insert" parameterType="com.test.auth.domain.TRolePermission">
+		insert into t_role_permission(
+    		ROLE_ID,
+    		PERMISSION_ID
+		)
+		values (
+    		#{roleId},
+    		#{permissionId}
+		)
+	</insert>
+		
+	
+	<!-- 通过ID更新 -->
+	<update id="updateByIdSelective" parameterType="com.test.auth.domain.TRolePermission">
+		update t_role_permission
+		<trim prefix="SET" prefixOverrides=", ">
+	    	<if test="roleId != null"> , ROLE_ID = #{roleId}</if>
+	    	<if test="permissionId != null"> , PERMISSION_ID = #{permissionId}</if>
+		</trim>
+		where role_id = #{roleId}
+	</update>
+	
+	<update id="updateById" parameterType="com.test.auth.domain.TRolePermission">
+		update t_role_permission
+		<trim prefix="SET" prefixOverrides=", "> 
+    		ROLE_ID = #{roleId},
+    		PERMISSION_ID = #{permissionId}
+    	</trim>
+		where role_id = #{roleId}
+	</update>
+</mapper>
