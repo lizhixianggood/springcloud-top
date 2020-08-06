@@ -26,5 +26,6 @@ public class UsercenterApplication {
 		public String divide(@RequestParam Integer a, @RequestParam Integer b) {
 			return String.valueOf(a / b);
 		}
+		
 	}
 }
